@@ -1,46 +1,6 @@
 import { useEffect, useState } from 'react';
 import { isObject } from 'lodash';
-import { useValidators } from './validators';
-
-
-/*
-const {fields, form} = useForm({
-    email: {
-        required: {
-            criteria: true // should be default true
-            message: '' // if not provided use the default required message
-        }
-        minLength: 3
-    },
-    password: {
-        required: {
-            criteria: true // should be default true
-            message: '' // if not provided use the default required message
-        }
-        minLength: {
-            criteria: 3
-            message:  // if not provided use the default  message
-        },
-        maxLength: {
-            criteria: 14
-            message:  // if not provided use the default  message
-        }
-    }
-});
-
-
-form.value  // {email, password}
-form.showError() // invoke the error message displayed on components
-form.isValid // boolean
-
-fields.email //
-
-<InputComponent name="lero lero eh Mato!!!" {...fields.email} />
-
-*/
-
-
-
+import { useValidators } from './useValidators';
 
 const standardizeValidation = (validation) => {
     if (isObject(validation)) return validation;
@@ -49,7 +9,7 @@ const standardizeValidation = (validation) => {
     };
 };
 
-export const useForm = (initialFields, initialState = {}) => {
+export const useCustomForm = (initialFields, initialState = {}) => {
     const [fields, setFields] = useState(initialFields);
     const [formData, setFormData] = useState(initialState);
     const [errorMessages, setErrorMessages] = useState({});
@@ -64,7 +24,7 @@ export const useForm = (initialFields, initialState = {}) => {
             field.forEach(validation => {
                 const requirements = standardizeValidation(validation);
                 const validator = validation.validator || validations[validation.rule];
-                const value = formData[fieldName]?.trim();
+                const value = typeof formData[fieldName] === 'string' ? formData[fieldName]?.trim() : formData[fieldName];
                 const { message } = validator(value, requirements);
                 if (message && !fieldErrorMessage) {
                     fieldErrorMessage = message || null;
@@ -99,7 +59,7 @@ export const useForm = (initialFields, initialState = {}) => {
 
     const isValid = () => {
         const allValidations = Object.keys(fields).map(fieldName => {
-            const value = formData[fieldName]?.trim();
+            const value = typeof formData[fieldName] === 'string' ? formData[fieldName]?.trim() : formData[fieldName];
             const response = fields[fieldName].map(validation => {
                 const requirements = standardizeValidation(validation);
                 const validator = validation.validator || validations[validation.rule];
