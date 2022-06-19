@@ -9,7 +9,7 @@ const standardizeValidation = (validation) => {
     };
 };
 
-export const useCustomForm = (initialFields, initialState = {}) => {
+export const useForm = (initialFields, initialState = {}) => {
     const [fields, setFields] = useState(initialFields);
     const [formData, setFormData] = useState(initialState);
     const [errorMessages, setErrorMessages] = useState({});
