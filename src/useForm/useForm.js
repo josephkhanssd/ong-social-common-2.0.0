@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { isObject } from 'lodash';
-import { useValidators } from './useValidators';
+import { useValidators } from './validators';
 
 const standardizeValidation = (validation) => {
     if (isObject(validation)) return validation;
